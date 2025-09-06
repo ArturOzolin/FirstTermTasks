@@ -11,4 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print message to console
-        run: date "+DATE: %F%nTIME: %T"
+        run: |
+	  date "+DATE: %F%nTIME: %T"
