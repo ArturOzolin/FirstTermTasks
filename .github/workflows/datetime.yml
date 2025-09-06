@@ -1,14 +1,16 @@
-name: Current Date and Time in Russian Federation, Moscow, MIPT, HSSE, 1 term!
+name: Simple CI job
 
 on:
   push:
-    branches: ["**"]
+    branches: [ "master" ]
   pull_request:
-    branches: ["**"]
+    branches: [ "master" ]
 
 jobs:
-  HSSE_Date:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Hello from MIPT HSSE. Check date&time below.
-        run: date "+DATE: %F%nTIME: %T"
+      - name: Print message to console
+        run: |
+          echo "Hello, world!"
+          echo "Hello, everyone!"
