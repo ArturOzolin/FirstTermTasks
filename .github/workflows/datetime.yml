@@ -11,10 +11,10 @@ on:
 jobs:
   HSSE_Date:
     runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Moscow
     steps:
       - name: Hello from MIPT HSSE. Check date&time below.
-	end:
-	  TZ: Europe/Moscow
         run: |
           date +"DATE: %F"
           date +"TIME: %T"
