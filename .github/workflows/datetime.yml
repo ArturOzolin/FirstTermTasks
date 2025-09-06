@@ -1,0 +1,13 @@
+name: Current date&time in Russian Federation, Moscow, MIPT, HSSE, 1 term!
+on:
+  - push
+  - pull_request
+jobs:
+  HSSE_Date:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Moscow
+    steps:
+      - name: Hello from MIPT HSSE. Check date&time below.
+        run: | 
+          date +"DATE: %F%nTIME: %T"
