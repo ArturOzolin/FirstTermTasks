@@ -2,9 +2,11 @@ name: Simple CI job
 
 on:
   push:
-    branches: [ "**" ]
+    branches:
+      - "**"
   pull_request:
-    branches: [ "**" ]
+    branches:
+      - "**"
 
 jobs:
   build:
@@ -12,4 +14,5 @@ jobs:
     steps:
       - name: Print message to console
         run: |
-	  date "+DATE: %F%nTIME: %T"
+          date +"DATE: %F"
+          date +"TIME: %T"
