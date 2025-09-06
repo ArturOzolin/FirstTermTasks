@@ -1,12 +1,8 @@
 name: Current date&time in Russian Federation, Moscow, MIPT, HSSE, 1 term!
 
 on:
-  push:
-    branches:
-      - "**"
-  pull_request:
-    branches:
-      - "**"
+  - push
+  - pull_request
 
 jobs:
   HSSE_Date:
@@ -15,6 +11,5 @@ jobs:
       TZ: Europe/Moscow
     steps:
       - name: Hello from MIPT HSSE. Check date&time below.
-        run: |
-          date +"DATE: %F"
-          date +"TIME: %T"
+        run: | 
+          date +"DATE: %F%nTIME: %T"
