@@ -35,7 +35,7 @@
                 <configuration>
                     <transformers>
                         <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                            <mainClass>com.mipt.arturozolin.Application</mainClass>
+                            <mainClass>com.mipt.arturozolin.MainClass</mainClass>
                         </transformer>
                     </transformers>
                 </configuration>
