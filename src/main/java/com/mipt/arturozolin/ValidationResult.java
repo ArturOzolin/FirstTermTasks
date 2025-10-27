@@ -13,4 +13,8 @@ import java.util.List;
 public class ValidationResult {
   private boolean isValid;
   private List<String> errors;
+  public void addError(String errorMessage) {
+    this.errors.add(errorMessage);
+    this.isValid = false;
+  }
 }
