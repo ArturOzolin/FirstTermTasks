@@ -29,11 +29,13 @@ public class InMemoryTaskRepository implements TaskRepository {
 
   @Override
   public Optional<Task> findById(String id) {
+
     return Optional.ofNullable(storage.get(id));
   }
 
   @Override
   public List<Task> findAll() {
+
     return new ArrayList<>(storage.values());
   }
 
