@@ -1,6 +1,7 @@
 package com.mipt.arturozolin.service;
 
 import com.mipt.arturozolin.config.PrototypeScopedBean;
+import com.mipt.arturozolin.exception.TaskNotFoundException;
 import com.mipt.arturozolin.model.Task;
 import com.mipt.arturozolin.repository.TaskRepository;
 import jakarta.annotation.PostConstruct;
@@ -68,14 +69,14 @@ public class TaskService {
   }
 
   public Task updateTask(String id, Task updatedTask) {
-    return taskRepository.findById(id).map(existing -> {
-      existing.setTitle(updatedTask.getTitle());
-      existing.setDescription(updatedTask.getDescription());
-      existing.setCompleted(updatedTask.isCompleted());
-      taskRepository.save(existing);
-      taskCache.put(existing.getId(), existing);
-      return existing;
-    }).orElseThrow(() -> new RuntimeException("Task not found"));
+    Task existing = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+    taskRepository.save(updatedTask);
+    taskCache.put(updatedTask.getId(), updatedTask);
+    return updatedTask;
+  }
+
+  public Task getTaskRequired(String id) {
+    return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
   }
 
   public void deleteTask(String id) {
