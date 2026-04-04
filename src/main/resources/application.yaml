@@ -1,9 +1,16 @@
 spring:
+  profiles:
+    active: dev
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 15MB
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 
 springdoc:
   swagger-ui:
@@ -13,4 +20,4 @@ springdoc:
 
 app:
   name: To-Do MVP Base
-  version: 2.0.0
+  version: 3.0.0

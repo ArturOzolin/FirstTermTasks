@@ -1,5 +1,11 @@
-logging:
-  level:
-    com.example.todolist: DEBUG
-app:
-  name: To-Do MVP [DEV]
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5444/todolist
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
