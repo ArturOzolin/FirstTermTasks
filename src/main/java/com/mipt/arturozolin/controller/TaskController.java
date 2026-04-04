@@ -50,7 +50,7 @@ public class TaskController {
           @ApiResponse(responseCode = "404", description = "Задача не найдена")
   })
   @GetMapping("/{id}")
-  public ResponseEntity<TaskResponseDto> getTaskById(@PathVariable String id) {
+  public ResponseEntity<TaskResponseDto> getTaskById(@PathVariable Long id) {
     Task task = taskService.getTaskRequired(id);
     return ResponseEntity.ok(taskMapper.toResponseDto(task));
   }
@@ -74,7 +74,7 @@ public class TaskController {
           @ApiResponse(responseCode = "404", description = "Задача не найдена")
   })
   @PutMapping("/{id}")
-  public ResponseEntity<TaskResponseDto> updateTask(@PathVariable String id, @Validated(OnUpdate.class) @RequestBody TaskUpdateDto taskDto) {
+  public ResponseEntity<TaskResponseDto> updateTask(@PathVariable Long id, @Validated(OnUpdate.class) @RequestBody TaskUpdateDto taskDto) {
     Task existing = taskService.getTaskRequired(id);
     Task updated = taskMapper.updateEntity(taskDto, existing);
     taskService.updateTask(id, updated);
@@ -84,7 +84,7 @@ public class TaskController {
   @Operation(summary = "Удалить задачу", description = "Удаляет задачу по её идентификатору")
   @ApiResponse(responseCode = "204", description = "Задача успешно удалена")
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteTask(@PathVariable String id) {
+  public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
     taskService.deleteTask(id);
     return ResponseEntity.noContent().build();
   }

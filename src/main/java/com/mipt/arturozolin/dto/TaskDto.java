@@ -1,4 +1,4 @@
-package com.mipt.arturozolin.model;
+package com.mipt.arturozolin.dto;
 
 
 import jakarta.validation.constraints.NotBlank;
@@ -9,17 +9,17 @@ import jakarta.validation.constraints.NotBlank;
  * Содержит аннотации валидации для проверки корректности входящих запросов до того, как они попадут в сервисный слой.
  */
 public class TaskDto {
-  private String id;
+  private Long id;
   @NotBlank(message = "Title cannot be empty")
   private String title;
   private String description;
   private boolean completed;
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

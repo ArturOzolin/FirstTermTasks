@@ -6,13 +6,13 @@ import com.mipt.arturozolin.dto.TaskUpdateDto;
 import com.mipt.arturozolin.model.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface TaskMapper {
-  Task toEntity(TaskCreateDto dto);
 
-  Task updateEntity(TaskUpdateDto dto, @MappingTarget Task task);
+    Task toEntity(TaskCreateDto dto);
 
-  TaskResponseDto toResponseDto(Task task);
+    Task updateEntity(TaskUpdateDto dto, @MappingTarget Task task);
+
+    TaskResponseDto toResponseDto(Task task);
 }

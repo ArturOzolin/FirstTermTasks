@@ -1,8 +1,5 @@
 package com.mipt.arturozolin.config;
 
-import com.mipt.arturozolin.repository.StubTaskRepository;
-import com.mipt.arturozolin.repository.TaskRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -11,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-  @Bean(name = "stubTaskRepository")
-  public TaskRepository stubTaskRepository() {
-    return new StubTaskRepository();
-  }
+//  @Bean(name = "stubTaskRepository")
+//  public TaskRepository stubTaskRepository() {
+//    return new StubTaskRepository();
+//  }
 }

@@ -10,77 +10,95 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Сервисный слой для управления задачами.
- * Содержит основную бизнес-логику, работает с репозиторием и внутренним кэшем.
- */
 @Slf4j
 @Service
 public class TaskService {
 
-  private final TaskRepository taskRepository;
-  private final ObjectProvider<PrototypeScopedBean> idGeneratorProvider;
-  private final Map<String, Task> taskCache = new ConcurrentHashMap<>();
+    private final TaskRepository taskRepository;
+    private final ObjectProvider<PrototypeScopedBean> idGeneratorProvider;
 
-  @Value("${app.name:DefaultApp}")
-  private String appName;
+    @Value("${app.name:DefaultApp}")
+    private String appName;
 
-  @Value("${app.version:1.0}")
-  private String appVersion;
+    @Value("${app.version:1.0}")
+    private String appVersion;
 
-  public TaskService(TaskRepository taskRepository, ObjectProvider<PrototypeScopedBean> idGeneratorProvider) {
-    this.taskRepository = taskRepository;
-    this.idGeneratorProvider = idGeneratorProvider;
-  }
+    public TaskService(TaskRepository taskRepository, ObjectProvider<PrototypeScopedBean> idGeneratorProvider) {
+        this.taskRepository = taskRepository;
+        this.idGeneratorProvider = idGeneratorProvider;
+    }
 
-  @PostConstruct
-  public void initCache() {
-    log.info("Initializing app: {} v{}", appName, appVersion);
-    Task defaultTask = new Task("1", "Learn Spring", "Read Longread 3", false);
-    taskRepository.save(defaultTask);
-    taskCache.put(defaultTask.getId(), defaultTask);
-    log.info("Cache initialized with {} tasks.", taskCache.size());
-  }
+    @PostConstruct
+    public void initCache() {
+        log.info("Initializing app: {} v{}", appName, appVersion);
+        /*
+        Task defaultTask = new Task("1", "Learn Spring", "Read Longread 3", false);
+        taskRepository.save(defaultTask);
+        taskCache.put(defaultTask.getId(), defaultTask);
+        log.info("Cache initialized with {} tasks.", taskCache.size());
+        */
+    }
 
-  @PreDestroy
-  public void cleanUp() {
-    log.info("Application shutting down. Tasks in cache before destroy: {}", taskCache.size());
-    taskCache.clear();
-  }
+    @PreDestroy
+    public void cleanUp() {
+        /*
+        log.info("Application shutting down. Tasks in cache before destroy: {}", taskCache.size());
+        taskCache.clear();
+        */
+    }
 
-  public Task createTask(Task task) {
-    task.setId(idGeneratorProvider.getObject().generateId());
-    Task saved = taskRepository.save(task);
-    taskCache.put(saved.getId(), saved);
-    return saved;
-  }
+    public Task createTask(Task task) {
+        // task.setId(idGeneratorProvider.getObject().generateId());
+        return taskRepository.save(task);
+    }
 
-  public Task getTask(String id) {
-    return taskCache.getOrDefault(id, taskRepository.findById(id).orElse(null));
-  }
+    public Task getTask(Long id) {
+        return taskRepository.findById(id).orElse(null);
+    }
 
-  public List<Task> getAllTasks() {
-    return taskRepository.findAll();
-  }
+    public List<Task> getAllTasks() {
+        return taskRepository.findAllWithAttachments();
+    }
 
-  public Task updateTask(String id, Task updatedTask) {
-    Task existing = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
-    taskRepository.save(updatedTask);
-    taskCache.put(updatedTask.getId(), updatedTask);
-    return updatedTask;
-  }
+    @Transactional
+    public Task updateTask(Long id, Task updatedTask) {
+        return taskRepository.findById(id).map(existing -> {
+            existing.setTitle(updatedTask.getTitle());
+            existing.setDescription(updatedTask.getDescription());
+            existing.setCompleted(updatedTask.isCompleted());
+            existing.setDueDate(updatedTask.getDueDate());
+            existing.setPriority(updatedTask.getPriority());
+            existing.setTags(updatedTask.getTags());
+            return taskRepository.save(existing);
+        }).orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+    }
 
-  public Task getTaskRequired(String id) {
-    return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
-  }
+    public Task getTaskRequired(Long id) {
+        return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task not found"));
+    }
 
-  public void deleteTask(String id) {
-    taskRepository.deleteById(id);
-    taskCache.remove(id);
-  }
+    @Transactional
+    public void deleteTask(Long id) {
+        taskRepository.deleteById(id);
+    }
+
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            isolation = Isolation.READ_COMMITTED,
+            rollbackFor = TaskNotFoundException.class
+    )
+    public void bulkCompleteTasks(List<Long> ids) {
+        for (Long id : ids) {
+            Task task = taskRepository.findById(id)
+                    .orElseThrow(() -> new TaskNotFoundException("Task with id " + id + " not found. Rollback all!"));
+            task.setCompleted(true);
+            taskRepository.save(task);
+        }
+    }
 }

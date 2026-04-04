@@ -37,7 +37,7 @@ class TaskMapperTest {
 
   @Test
   void shouldMapEntityToResponseDto() {
-    Task task = new Task("1", "Title", "Desc", false);
+    Task task = new Task(1L, "Title", "Desc", false);
     task.setPriority(Priority.LOW);
 
     TaskResponseDto response = taskMapper.toResponseDto(task);

@@ -19,21 +19,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AttachmentController.class)
 class AttachmentControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private AttachmentService attachmentService;
+    @MockBean
+    private AttachmentService attachmentService;
 
-  @Test
-  void shouldUploadFile() throws Exception {
-    MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello".getBytes());
-    TaskAttachment mockAttachment = new TaskAttachment();
-    mockAttachment.setId(1L);
+    @Test
+    void shouldUploadFile() throws Exception {
+        MockMultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello".getBytes());
+        TaskAttachment mockAttachment = new TaskAttachment();
+        mockAttachment.setId(1L);
 
-    when(attachmentService.storeAttachment(eq("task-1"), any())).thenReturn(mockAttachment);
-
-    mockMvc.perform(multipart("/api/tasks/task-1/attachments").file(file))
-            .andExpect(status().isCreated());
-  }
+        when(attachmentService.storeAttachment(eq(1L), any())).thenReturn(mockAttachment);
+        mockMvc.perform(multipart("/api/tasks/1/attachments").file(file))
+                .andExpect(status().isCreated());
+    }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
 @Schema(description = "Данные ответа по задаче")
 public class TaskResponseDto {
   @Schema(description = "Уникальный ID задачи")
-  private String id;
+  private Long id;
   @Schema(description = "Заголовок задачи")
   private String title;
   @Schema(description = "Описание задачи")
@@ -26,11 +26,11 @@ public class TaskResponseDto {
   @Schema(description = "Теги")
   private Set<String> tags;
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 

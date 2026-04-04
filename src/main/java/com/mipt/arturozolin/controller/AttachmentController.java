@@ -34,7 +34,7 @@ public class AttachmentController {
           @ApiResponse(responseCode = "404", description = "Задача не найдена")
   })
   @PostMapping(value = "/tasks/{taskId}/attachments", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<AttachmentResponseDto> upload(@PathVariable String taskId, @RequestParam("file") MultipartFile file) {
+  public ResponseEntity<AttachmentResponseDto> upload(@PathVariable Long taskId, @RequestParam("file") MultipartFile file) {
     TaskAttachment attachment = attachmentService.storeAttachment(taskId, file);
     return ResponseEntity.status(201).body(new AttachmentResponseDto(attachment.getId(), attachment.getFileName(), attachment.getSize(), attachment.getUploadedAt()));
   }
@@ -65,7 +65,7 @@ public class AttachmentController {
   @Operation(summary = "Получить список вложений задачи", description = "Возвращает метаданные всех файлов, прикрепленных к задаче")
   @ApiResponse(responseCode = "200", description = "Список вложений успешно получен")
   @GetMapping("/tasks/{taskId}/attachments")
-  public ResponseEntity<List<AttachmentResponseDto>> getAttachments(@PathVariable String taskId) {
+  public ResponseEntity<List<AttachmentResponseDto>> getAttachments(@PathVariable Long taskId) {
     List<AttachmentResponseDto> response = attachmentService.getAttachmentsByTaskId(taskId).stream()
             .map(a -> new AttachmentResponseDto(a.getId(), a.getFileName(), a.getSize(), a.getUploadedAt()))
             .collect(Collectors.toList());
