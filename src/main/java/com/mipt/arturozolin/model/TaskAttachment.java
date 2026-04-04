@@ -1,73 +1,90 @@
 package com.mipt.arturozolin.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "task_attachments")
 public class TaskAttachment {
-  private Long id;
-  private String taskId;
-  private String fileName;
-  private String storedFileName;
-  private String contentType;
-  private long size;
-  private LocalDateTime uploadedAt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  public TaskAttachment() {
-    this.uploadedAt = LocalDateTime.now();
-  }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "task_id", nullable = false)
+    private Task task;
 
-  public Long getId() {
-    return id;
-  }
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    @Column(name = "stored_file_name", nullable = false)
+    private String storedFileName;
 
-  public String getTaskId() {
-    return taskId;
-  }
+    @Column(name = "content_type")
+    private String contentType;
 
-  public void setTaskId(String taskId) {
-    this.taskId = taskId;
-  }
+    @Column(nullable = false)
+    private long size;
 
-  public String getFileName() {
-    return fileName;
-  }
+    @Column(name = "uploaded_at", nullable = false, updatable = false)
+    private LocalDateTime uploadedAt = LocalDateTime.now();
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
+    public TaskAttachment() {
+    }
 
-  public String getStoredFileName() {
-    return storedFileName;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setStoredFileName(String storedFileName) {
-    this.storedFileName = storedFileName;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getContentType() {
-    return contentType;
-  }
+    public Task getTask() {
+        return task;
+    }
 
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
-  }
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
-  public long getSize() {
-    return size;
-  }
+    public String getFileName() {
+        return fileName;
+    }
 
-  public void setSize(long size) {
-    this.size = size;
-  }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-  public LocalDateTime getUploadedAt() {
-    return uploadedAt;
-  }
+    public String getStoredFileName() {
+        return storedFileName;
+    }
 
-  public void setUploadedAt(LocalDateTime uploadedAt) {
-    this.uploadedAt = uploadedAt;
-  }
+    public void setStoredFileName(String storedFileName) {
+        this.storedFileName = storedFileName;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
+    }
+
+    public LocalDateTime getUploadedAt() {
+        return uploadedAt;
+    }
+
+    public void setUploadedAt(LocalDateTime uploadedAt) {
+        this.uploadedAt = uploadedAt;
+    }
 }
