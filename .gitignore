@@ -61,3 +61,5 @@ replay_pid*
 out/
 .idea_modules/
 .gitattributes
+uploads/
+local.properties
